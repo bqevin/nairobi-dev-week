@@ -158,13 +158,13 @@ if (Input::exists()) {
                         <div class="row-fluid">
                             <select class="form-control span12" id="jobTitle" name="ticket_option">
                                 <option value="" disabled selected>Select an option...</option>
-                                <option value="7500, Scrum Workshop">Scrum Workshop</option>
-                                <option value="7500, All Access Pass">All Access Pass</option>
-                                <option value="7500, Developer Workshops">Developer Workshops</option>
-                                <option value="7500, Daily Workshop">Daily Workshop</option>
-                                <option value="7500, Tech Hiring Mixer">Tech Hiring Mixer</option>
-                                <option value="7500, Twitter #HelloWorld Tour">Twitter #HelloWorld Tour</option>
-                                <option value="7500, Friday Afterparty">Friday Afterparty</option>
+                                <option value="1000, Scrum Workshop">Scrum Workshop</option>
+                                <option value="1000, All Access Pass">All Access Pass</option>
+                                <option value="1000, Developer Workshops">Developer Workshops</option>
+                                <option value="1000, Daily Workshop">Daily Workshop</option>
+                                <option value="1000, Tech Hiring Mixer">Tech Hiring Mixer</option>
+                                <option value="1000, Twitter #HelloWorld Tour">Twitter #HelloWorld Tour</option>
+                                <option value="1000, Friday Afterparty">Friday Afterparty</option>
                             </select>
                         </div>
                         <!-- <div class="help-text">Please select an option.</div> -->
