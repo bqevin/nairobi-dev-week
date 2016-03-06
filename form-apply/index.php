@@ -37,16 +37,6 @@
     </iframe>
     </noscript>
 
-<div id="fb-root"></div>
-<script>(function (d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) return;
-    js = d.createElement(s);
-    js.id = id;
-    js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=619048868222429&version=v2.2";
-    fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
-
 <div class="root">
 
     <section class="masthead">
@@ -69,12 +59,96 @@
             <h5>Apply to attend</h5>
         </div>
     </section>
+<?php
+require_once 'core/init.php';
+ini_set('display_errors',1);
+error_reporting(E_ALL);
+//var_dump(Token::check(Input::get('token')));
+if (Input::exists()) {
+    if (Token::check(Input::get('token'))) {
+        //echo "I have been run <br>";
+        //echo Input::get('username');
+        $validate = new Validate();
+        $validation = $validate->check($_POST, array(
+            //NB:Fiels matches field names in DB
+            'fname' => array(
+                'required' => true,
+                'min' => 2
+                ),
+            'lname' => array(
+                'required' => true,
+                'min' => 2
+                ),
+            'company' => array(
+                'required' => true,
+                'min' => 2
+                ),
+            'email' => array(
+                'required' => true,
+                //table name to check if value already exists
+                'unique' => 'users'
+                ),
+            'gender' => array(
+                'required' => true
+                ),
+            'phone' => array(
+                'required' => true,
+                'min' => 7
+                ),
+            'country' => array(
+                'required' => true,
+                )
+            // 'password_again' => array(
+            //     'required' => true,
+            //     'matches' => 'password'
+            //     )
+            ));
+        if ($validation->passed()) {
+            $user = new User();
+            $salt = Hash::salt(32);// Db is 32 length
+            // die();
+            try{
+                //DB names
+                $user->create(array(
+                        'fname' => Input::get('fname'),
+                        'lname' => Input::get('lname'),
+                        'company' => Input::get('company'),
+                        'job_title' => Input::get('job_title'),
+                        'category_desc' => Input::get('category_desc'),
+                        'app_name' => Input::get('app_name'),
+                        'app_link_main' => Input::get('app_link_main'),
+                        'app_name_extra' => Input::get('app_name_extra'),
+                        'app_link_extra' => Input::get('app_link_extra'),
+                        'email' => Input::get('email'),
+                        'gender' => Input::get('gender'),
+                        'phone' => Input::get('phone'),
+                        'joined' => date('Y-m-d H:i:s'),
+                        'country' => Input::get('country')
+                    ));
+                Session::flash('home', 'You have been registered and can now log in');
+               Redirect::to('checkout.php');
+            }catch(Exception $e){
+                die($e->getMessage());
+                //Alternative is rediect user to a failure page
+            }
+            //echo "Passed!";
+            // Session::flash('success', 'You  have registered succefully!');
 
+        }else{
+            //State Errors
+            foreach($validation->errors() as $error){
+                echo $error, '<br>';
+                //echo Input::get('username');
+            };
+        }
+    }
+}
+?>
     <section class="form-content">
         <div class="container">
-            <form class="form form-vertical" method="post" id="application" action="/application">
-                <input type="hidden" name="_token" value="a5c0db72d2bb83ee681e58d9eb08d531700a17d6b73bb5472a923aa73f0ce8a0">
-                <input type="hidden" id="facebook_id" name="application[facebook_id]" value="0">
+            <form class="form form-vertical" method="post" id="application" action="">
+               <!--  <input type="hidden" name="_token" value="a5c0db72d2bb83ee681e58d9eb08d531700a17d6b73bb5472a923aa73f0ce8a0">
+                <input type="hidden" id="facebook_id" name="application[facebook_id]" value="0"> -->
                 <fieldset>
                     <p>Fill out the form below to apply for Nairobi Developers Week. 
                         <span class="tip"
@@ -95,12 +169,12 @@
                 </fieldset>
                 <fieldset>
                     <div class="form-group register-form">
-                        <label for="firstName"> Hi Developer!!!</label>
+                        <label for="firstName"> Howdy, Dev!</label>
                         <div class="row-fluid">
                             <input type="text" class="form-control span6" id="firstName" placeholder="First name"
-                                   value="" name="fname">
+                                   value="<?php echo escape(Input::get('fname'));?>" name="fname">
                             <input type="text" class="form-control span6" id="lastName" placeholder="Last name"
-                                   value="" name="lname">
+                                   value="<?php echo escape(Input::get('lname'));?>" name="lname">
                         </div>
                         <div class="help-text">Please enter a valid first and lastname.</div>
                     </div>
@@ -108,7 +182,7 @@
                         <label for="emailAddress">Your email address</label>
                         <div class="row-fluid">
                             <input type="email" class="form-control span12" id="emailAddress" name="email"
-                                   value="">
+                                   value="<?php echo escape(Input::get('email'));?>">
                         </div>
                         <div class="help-text">Please enter a valid email address.</div>
                     </div>
@@ -116,15 +190,15 @@
                         <label for="phone">Your phone number</label>
                         <div class="row-fluid">
                             <input type="tel" class="form-control span12" id="phone" name="phone"
-                                   value="">
+                                   value="<?php echo escape(Input::get('phone'));?>">
                         </div>
-                        <div class="help-text">Please enter a valid email address.</div>
+                        <div class="help-text">Please enter a valid phone number.</div>
                     </div>
                     <div class="form-group register-form">
                         <label for="companyName">Your company name</label>
                         <div class="row-fluid">
                             <input type="text" class="form-control span12" id="companyName"
-                                   name="company" value="">
+                                   name="company" value="<?php echo escape(Input::get('company'));?>">
                         </div>
                         <div class="help-text">Please enter a valid company name.</div>
                     </div>
@@ -400,11 +474,11 @@
                                     <option value="ZW">Zimbabwe</option>
                                 </select>
                             </div>
-                            <div class="span6">
+                            <!-- <div class="span6">
                                 <label for="zipCode">Your zip code</label>
                                 <input type="text" class="form-control" id="zipCode" name="zipcode"
                                        value="">
-                            </div>
+                            </div> -->
                         </div>
                         <div class="help-text">Please select an option.</div>
                     </div>
@@ -417,18 +491,18 @@
                         <label for="appName">Do you work on any apps?</label>
                         <div class="row-fluid">
                             <input type="text" class="form-control span6" id="appName" name="app_name"
-                                   placeholder="App name">
+                                   placeholder="App name" value="<?php echo escape(Input::get('app_name'));?>">
                             <input type="text" class="form-control span6" id="appLink"
-                                   placeholder="Link to App Store or Google Play" name="app_link">
+                                   placeholder="Link to App Store or Google Play" name="app_link_main" value="<?php echo escape(Input::get('app_link_main'));?>">
                         </div>
                     </div>
                     <div class="form-group extra-app">
                         <label for="appName">Do you work on another app?</label>
                         <div class="row-fluid">
                             <input type="text" class="form-control span6" id="appNameExtra" name="app_name_extra"
-                                   placeholder="App name">
+                                   placeholder="App name" value="<?php echo escape(Input::get('app_name_extra'));?>">
                             <input type="text" class="form-control span6" id="appLinkExtra"
-                                   placeholder="Link to App Store or Google Play" name="app_link_extra">
+                                   placeholder="Link to App Store or Google Play" name="app_link_extra" value="<?php echo escape(Input::get('app_link_extra'));?>">
                         </div>
                     </div>
 
@@ -501,8 +575,9 @@
                     <p class="notice-text">By submitting this form, you also agree to the <a
                             href="#" target="_blank">Nairobi Developers Week Code of Conduct</a>.</p>
 
-                    <button class="btn btn-primary" id="submit-application">Submit</button>
-
+                    <input type="hidden" name="token" value="<?php echo Token::generate();?>">
+                    <!-- <input class="btn btn-primary" type="submit" value="Submit"> -->
+                    <button class="btn btn-primary" type="submit" id="submit-application" >Submit</button>
                     <div class="form-group" id="submit-process">
                         <a class="btn btn-processing" href="#">Processing your application</a>
                     </div>
@@ -574,11 +649,12 @@
     </div>
     <nav>
         <ul>
-            <li><a href="../about/index.html">About</a></li>
-            <li><a href="../schedule/index.html">Schedule</a></li>
-            <li><a href="../getting-here/index.html">Getting Here</a></li>
-            <li><a href="../watch/index.html">Watch F8</a></li>
-            <li class="active"><a href="../registration/index.html">Register</a></li>
+            <li><a href="../#how-it-works">Learn more</a></li>
+            <li><a href="../#events">Events</a></li>
+            <li><a href="../#speakers">Speakers</a></li>
+            <li><a href="../#sponsors">Sponsors</a></li>
+            <li><a href="mailto:hello@nairobideveloperweek.com?subject=[web enquiry]">Chat with us</a></li>
+            <li class="active"><a href="#">Register</a></li>
         </ul>
     </nav>
 </div>
