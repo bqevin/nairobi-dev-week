@@ -125,6 +125,10 @@ if (Input::exists()) {
                         'joined' => date('Y-m-d H:i:s'),
                         'country' => Input::get('country')
                     ));
+                $_SESSION['fname'] = Input::get('fname');
+                $_SESSION['lname'] = Input::get('lname');
+                $_SESSION['email'] = Input::get('email');
+                $_SESSION['phone'] = Input::get('phone');
                 Session::flash('home', 'You have been registered and can now log in');
                Redirect::to('checkout.php');
             }catch(Exception $e){
