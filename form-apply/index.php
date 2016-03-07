@@ -1,3 +1,8 @@
+<?php
+require_once 'core/init.php';
+ob_start();
+error_reporting(0);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -60,9 +65,6 @@
         </div>
     </section>
 <?php
-require_once 'core/init.php';
-ini_set('display_errors',1);
-error_reporting(E_ALL);
 //var_dump(Token::check(Input::get('token')));
 if (Input::exists()) {
     if (Token::check(Input::get('token'))) {
@@ -80,16 +82,12 @@ if (Input::exists()) {
                 'min' => 2
                 ),
             'company' => array(
-                'required' => true,
                 'min' => 2
                 ),
             'email' => array(
                 'required' => true,
                 //table name to check if value already exists
                 'unique' => 'users'
-                ),
-            'gender' => array(
-                'required' => true
                 ),
             'phone' => array(
                 'required' => true,
@@ -175,9 +173,9 @@ if (Input::exists()) {
                     <div class="form-group register-form">
                         <label for="firstName"> Howdy, Dev!</label>
                         <div class="row-fluid">
-                            <input type="text" class="form-control span6" id="firstName" placeholder="First name"
+                            <input type="text" class="form-control span6" id="firstName" required placeholder="First name"
                                    value="<?php echo escape(Input::get('fname'));?>" name="fname">
-                            <input type="text" class="form-control span6" id="lastName" placeholder="Last name"
+                            <input type="text" class="form-control span6" id="lastName" required placeholder="Last name"
                                    value="<?php echo escape(Input::get('lname'));?>" name="lname">
                         </div>
                         <div class="help-text">Please enter a valid first and lastname.</div>
@@ -185,7 +183,7 @@ if (Input::exists()) {
                     <div class="form-group register-form">
                         <label for="emailAddress">Your email address</label>
                         <div class="row-fluid">
-                            <input type="email" class="form-control span12" id="emailAddress" name="email"
+                            <input type="email" class="form-control span12" id="emailAddress" required name="email"
                                    value="<?php echo escape(Input::get('email'));?>">
                         </div>
                         <div class="help-text">Please enter a valid email address.</div>
@@ -193,49 +191,16 @@ if (Input::exists()) {
                     <div class="form-group register-form">
                         <label for="phone">Your phone number</label>
                         <div class="row-fluid">
-                            <input type="tel" class="form-control span12" id="phone" name="phone"
+                            <input type="tel" class="form-control span12" id="phone" required name="phone"
                                    value="<?php echo escape(Input::get('phone'));?>">
                         </div>
                         <div class="help-text">Please enter a valid phone number.</div>
                     </div>
                     <div class="form-group register-form">
-                        <label for="companyName">Your company name</label>
-                        <div class="row-fluid">
-                            <input type="text" class="form-control span12" id="companyName"
-                                   name="company" value="<?php echo escape(Input::get('company'));?>">
-                        </div>
-                        <div class="help-text">Please enter a valid company name.</div>
-                    </div>
-                    <div class="form-group register-form">
-                        <label for="jobTitle">Your job title</label>
-                        <div class="row-fluid">
-                            <select class="form-control span12" id="jobTitle" name="job_title">
-                                <option value="" disabled selected>Select an option...</option>
-                                <option value="Publisher">Publisher</option>
-                                <option value="Developer">Developer</option>
-                                <option value="Student">Student</option>
-                                <option value="CEO">CEO</option>
-                                <option value="VP of Eng, CTO, CIO">VP of Eng, CTO, CIO</option>
-                                <option value="Dev Ops">Dev Ops</option>
-                                <option value="Data Analyst">Data Analyst</option>
-                                <option value="Product Manager">Product Manager</option>
-                                <option value="Marketer">Marketer</option>
-                                <option value="Designer">Designer</option>
-                                <option value="Growth Hacker">Growth Hacker</option>
-                                <option value="Business Development">Business Development</option>
-                                <option value="Software Engineer">Software Engineer</option>
-                                <option value="Chief Revenue Officer">Chief Revenue Officer</option>
-                                <option value="Other">Other</option>
-                                <option value="I prefer not to disclose">I prefer not to disclose</option>
-                            </select>
-                        </div>
-                        <div class="help-text">Please select an option.</div>
-                    </div>
-                    <div class="form-group register-form">
                         <div class="row-fluid">
                             <div class="span6">
                                 <label for="country">Your country</label>
-                                <select class="form-control" id="country" name="country">
+                                <select class="form-control" required id="country" name="country">
                                     <option value="" disabled selected>Select an option...</option>
                                     <option value="AF">Afghanistan</option>
                                     <option value="AL">Albania</option>
@@ -486,6 +451,39 @@ if (Input::exists()) {
                         </div>
                         <div class="help-text">Please select an option.</div>
                     </div>
+                    <div class="form-group register-form">
+                        <label for="companyName">Your company name</label>
+                        <div class="row-fluid">
+                            <input type="text" class="form-control span12" id="companyName"
+                                   name="company" value="<?php echo escape(Input::get('company'));?>">
+                        </div>
+                        <div class="help-text">Please enter a valid company name.</div>
+                    </div>
+                    <div class="form-group register-form">
+                        <label for="jobTitle">Your job title</label>
+                        <div class="row-fluid">
+                            <select class="form-control span12" id="jobTitle" name="job_title">
+                                <option value="" disabled selected>Select an option...</option>
+                                <option value="Publisher">Publisher</option>
+                                <option value="Developer">Developer</option>
+                                <option value="Student">Student</option>
+                                <option value="CEO">CEO</option>
+                                <option value="VP of Eng, CTO, CIO">VP of Eng, CTO, CIO</option>
+                                <option value="Dev Ops">Dev Ops</option>
+                                <option value="Data Analyst">Data Analyst</option>
+                                <option value="Product Manager">Product Manager</option>
+                                <option value="Marketer">Marketer</option>
+                                <option value="Designer">Designer</option>
+                                <option value="Growth Hacker">Growth Hacker</option>
+                                <option value="Business Development">Business Development</option>
+                                <option value="Software Engineer">Software Engineer</option>
+                                <option value="Chief Revenue Officer">Chief Revenue Officer</option>
+                                <option value="Other">Other</option>
+                                <option value="I prefer not to disclose">I prefer not to disclose</option>
+                            </select>
+                        </div>
+                        <div class="help-text">Please select an option.</div>
+                    </div>
                 </fieldset>
 
                 <fieldset class="register-form">
@@ -523,7 +521,8 @@ if (Input::exists()) {
                                 <option value="VC or accelerator backed startup with funding">VC or accelerator backed
                                     startup with funding
                                 </option>
-                                <option value="Established company ­ Non Developer">Established company ­ Non Developer</option>
+                                <option value="Established company">Established company</option>
+                                <option value="Non Developer">Non Developer</option>
                                 <option value="I prefer not to disclose.">Other.</option>
                             </select>
                         </div>
@@ -540,9 +539,6 @@ if (Input::exists()) {
                                     <option value="" disabled selected>Select an option...</option>
                                     <option value="Male">Male</option>
                                     <option value="Female">Female</option>
-                                    <option value="Gender Non-conforming/Transgender">Gender
-                                        Non-conforming/Transgender
-                                    </option>
                                 </select>
                             </div>
                             <!-- <div class="span6">

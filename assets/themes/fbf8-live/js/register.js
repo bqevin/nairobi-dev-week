@@ -5,6 +5,8 @@ function validEmail(e) {
 
 var scrollToValue = -1;
 $(document).ready(function() {
+    $(".register-form").show();
+    $("#btn-register-with-email").hide();
     $("#ethnicity").change(function() {
         "" != $(this).val() && ($(this).parent().removeClass("error"), $(this).parent().parent().parent().find(".help-text").hide())
     }), $("#gender").change(function() {
@@ -36,8 +38,8 @@ $(document).ready(function() {
                 scrollTop: t
             }, 500), !1
         }
-        return !1
-    }),$("#btn-register-with-email").click(function() {
-        return $(".register-form").show(), $("#btn-register-with-email").hide(), !1
-    })
+        return !1})
+    // }),$("#btn-register-with-email").click(function() {
+    //     return $(".register-form").show(), $("#btn-register-with-email").hide(), !1
+    // })
     });
